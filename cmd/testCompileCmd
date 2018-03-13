@@ -1,0 +1,1 @@
+g++ -ansi -Wall -O3 -o test test.cpp ../common.o -L. -lfhew -lfftw3

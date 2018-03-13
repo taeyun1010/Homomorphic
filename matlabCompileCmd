@@ -1,0 +1,1 @@
+mex test.cpp libfhew.a -lfftw3 ../common.o
