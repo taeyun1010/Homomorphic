@@ -22,7 +22,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     int plaintext;
 
     plaintext = mxGetScalar(prhs[0]);
-    cout << "plaintext = " << plaintext << "\n";
+    //cout << "plaintext = " << plaintext << "\n";
 //     if(plaintext == NULL) 
 //       mexErrMsgIdAndTxt( "MATLAB:revord:conversionFailed",
 //               "Could not convert input to string.");
@@ -48,8 +48,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     *b = ct.b;
     
     
-    cout << "&ct = " << &ct << "\n";
-    cout << "ct.b = " << ct.b << "\n";
+    //cout << "&ct = " << &ct << "\n";
+    //cout << "ct.b = " << ct.b << "\n";
     //n =500
     for (int i=0; i< n;i++){
         //cout << "ct.a[i] = " << ct.a[i] << "\n";
@@ -59,10 +59,10 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     }
     
     //answer = &ct;
-    
-    int decrypted = LWE::Decrypt(*SK,ct);
-    cout << "decrypted = "<< decrypted << "\n";
-    
+//     
+//     int decrypted = LWE::Decrypt(*SK,ct);
+//     cout << "decrypted = "<< decrypted << "\n";
+//     
     //plhs[0] = answer;
     
     return;

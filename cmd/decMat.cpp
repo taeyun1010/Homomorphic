@@ -28,10 +28,10 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     b = mxGetScalar(prhs[1]);
     
     for (int i =0; i< n ; i++){
-        cout << "a[i] = " << a[i] << "\n";
+        //cout << "a[i] = " << a[i] << "\n";
         ct.a[i] = a[i];
     }
-    cout << "b = " << b << "\n";
+   // cout << "b = " << b << "\n";
     
 //     if(plaintext == NULL) 
 //       mexErrMsgIdAndTxt( "MATLAB:revord:conversionFailed",
@@ -63,7 +63,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     //answer = &ct;
     
     
-    cout << "decrypted = "<< decrypted << "\n";
+    //cout << "decrypted = "<< decrypted << "\n";
     
     //plhs[0] = answer;
     
