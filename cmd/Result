@@ -1,2 +1,3 @@
 Encrypting 10 fingercode pairs and storing encrypted pairs to database took 82.904653 seconds.
 Encrypting 20 fingercode pairs and storing encrypted pairs to database took 284.108383 seconds.
+            30                                                             781.719677 seconds.
