@@ -28,6 +28,7 @@ int vectorlength = num_disk * num_sectors;
 // double vectors[vectorlength]; 
 
 int fingerprintvector[640] = {0};
+int fingerprintvector2[640] = {0};
 
 void XorGate(LWE::CipherText* res, const FHEW::EvalKey& EK, const LWE::CipherText& ct1, const LWE::CipherText& ct2) {
     LWE::CipherText *orResult, *nandResult;
@@ -422,10 +423,6 @@ void encryptPlaintexts(LWE::CipherText** result[], int inputs[]){
     }
 }
 
-//given two array of encrypted plaintexts, calculate 1 norm
-int oneNorm(LWE::CipherText** input1[], LWE::CipherText** input2[]){
-
-}
 
 
 // calculate absolute value of given encrypted integer
@@ -434,19 +431,54 @@ void absolute(LWE::CipherText* result[], const FHEW::EvalKey& EK, LWE::CipherTex
     LWE::CipherText* msbct = ct[(numBits-1)];
     int msb = LWE::Decrypt(*SK, *msbct);
     
-    //calculate 2's complement only if this is a negative number
+//     //calculate 2's complement only if this is a negative number
+//     if (msb == 1){
+//         
+//         LWE::CipherText* tempresult[numBits];
+//         
+//         //flip all bits
+//         for(int i=0; i<numBits; i++){
+//             LWE::CipherText* inputbit = ct[i];
+//             
+//             LWE::CipherText *notResult;
+//             notResult = new LWE::CipherText;
+//             FHEW::HomNOT(notResult, *inputbit);
+//             tempresult[i] = notResult;
+//             
+//         }
+//         
+//         //add one
+//         
+//         LWE::CipherText *initialcarry;
+//         
+//         LWE::CipherText* onect[numBits];
+//         encryptInt(onect, 1);
+//         
+//         initialcarry = new LWE::CipherText;
+//         
+//         //this was supposed to be an indicator of whether addition returned a carry in most sig bit, but not suppported, for now
+//         int carryOutput = 0;
+//         int* carryPointer = &carryOutput;
+//         
+//         //initialize carry to 0
+//         LWE::Encrypt(initialcarry, *SK, 0);
+//         
+//         addition(result, carryPointer, EK, onect, tempresult, *initialcarry);
+//     }
+    
+     //calculate 2's complement only if this is a negative number
     if (msb == 1){
         
-        LWE::CipherText* tempresult[numBits];
+        //LWE::CipherText* tempresult[numBits];
         
         //flip all bits
         for(int i=0; i<numBits; i++){
             LWE::CipherText* inputbit = ct[i];
             
-            LWE::CipherText *notResult;
-            notResult = new LWE::CipherText;
-            FHEW::HomNOT(notResult, *inputbit);
-            tempresult[i] = notResult;
+            //LWE::CipherText *notResult;
+           // notResult = new LWE::CipherText;
+            FHEW::HomNOT(inputbit, *inputbit);
+            result[i] = inputbit;
             
         }
         
@@ -466,7 +498,7 @@ void absolute(LWE::CipherText* result[], const FHEW::EvalKey& EK, LWE::CipherTex
         //initialize carry to 0
         LWE::Encrypt(initialcarry, *SK, 0);
         
-        addition(result, carryPointer, EK, onect, tempresult, *initialcarry);
+        addition(result, carryPointer, EK, onect, result, *initialcarry);
     }
     
     //just return the same ct
@@ -481,6 +513,20 @@ void absolute(LWE::CipherText* result[], const FHEW::EvalKey& EK, LWE::CipherTex
     
     
 }
+
+//determine if given encrypted integer is negative, returns 1 if negative
+int isNegative(LWE::CipherText* input[]){
+    LWE::CipherText* msbct = ct[(numBits-1)];
+    int msb = LWE::Decrypt(*SK, *msbct);
+    return msb;
+}
+
+
+//given two array of encrypted plaintexts, calculate 1 norm
+int oneNorm(LWE::CipherText** input1[], LWE::CipherText** input2[]){
+    
+}
+
 
 int main(int argc, char *argv[]) {
 
@@ -526,18 +572,18 @@ int main(int argc, char *argv[]) {
   //initialize carry to 0 
   LWE::Encrypt(initialcarry, *SK, 0);
   
-  //
-  // test encryptint and decryptint, absolute
-       //integer
-  LWE::CipherText* encrypt[numBits];
-  LWE::CipherText* result[numBits];
-   encryptInt(encrypt, input1);
-   absolute(result, *EK, encrypt);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-  int decrypted = decryptInt(result);
-  cout << "abs value = " << decrypted << "\n";
-//
-  //
-  
+//   //
+//   // test encryptint and decryptint, absolute
+//        //integer
+//   LWE::CipherText* encrypt[numBits];
+//   LWE::CipherText* result[numBits];
+//    encryptInt(encrypt, input1);
+//    absolute(result, *EK, encrypt);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+//   int decrypted = decryptInt(result);
+//   cout << "abs value = " << decrypted << "\n";
+// //
+//   //
+//   
   
   
   //
