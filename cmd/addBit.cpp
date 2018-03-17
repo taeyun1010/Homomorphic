@@ -19,6 +19,16 @@ LWE::SecretKey* SK;
 
 int numBits =10;
 
+int num_disk = 8;
+int num_sectors = 80;
+
+int vectorlength = num_disk * num_sectors;
+// 
+// //initialize
+// double vectors[vectorlength]; 
+
+int fingerprintvector[640] = {0};
+
 void XorGate(LWE::CipherText* res, const FHEW::EvalKey& EK, const LWE::CipherText& ct1, const LWE::CipherText& ct2) {
     LWE::CipherText *orResult, *nandResult;
     
@@ -273,7 +283,7 @@ void encryptInt(LWE::CipherText* result[], int input){
     for (vector<int>::const_iterator i = bits.begin(); i != bits.end(); ++i){
 //         if (j >= numBits)
 //             break;
-        cout << *i << ' ';
+        //cout << *i << ' ';
         LWE::CipherText* ct = new LWE::CipherText;
         LWE::Encrypt(ct, *SK, *i);
         result[j] = ct;
@@ -305,11 +315,64 @@ int decryptInt(LWE::CipherText* encrypted[]){
 
 // TODO: encrypts two inputs, adds them, decrypts to see if addition works
 void addPlaintext(int input1, int input2){
-    vector<int> bits1 = convert(input1);
-    vector<int> bits2 = convert(input2);
+   LWE::CipherText* initialcarry;
+
+    initialcarry = new LWE::CipherText;
+  LWE::CipherText* encrypt1[numBits];
+  LWE::CipherText* encrypt2[numBits];
+   encryptInt(encrypt1, input1);
+   encryptInt(encrypt2, input2);
+   
+  //int decrypted = decryptInt(encrypt);
+  //cout << "decrypted = " << decrypted << "\n";
+
     
-    for (vector<int>::const_iterator i = bits1.begin(); i != bits1.end(); ++i)
-    cout << *i << ' ';
+  int carryOutput = 0;
+  int* carryPointer = &carryOutput;
+   
+  //initialize carry to 0 
+  LWE::Encrypt(initialcarry, *SK, 0);
+  
+  //4 byte integer
+  LWE::CipherText* sum[numBits];
+  LWE::CipherText* ctarray1[numBits];
+  LWE::CipherText* ctarray2[numBits];
+   
+  clock_t begin = clock();
+  
+   addition(sum, carryPointer, *EK, encrypt1, encrypt2, *initialcarry);
+    
+    clock_t end = clock();
+    double elapsed_secs = double(end-begin) / CLOCKS_PER_SEC;
+    cout << "addition time = " << elapsed_secs << "\n";
+   int result = decryptInt(sum);
+ 
+//    
+//     for (vector<int>::const_iterator i = bits1.begin(); i != bits1.end(); ++i)
+//     cout << *i << ' ';
+   cout << "addition result = " << result << "\n";
+   
+   //   clock_t begin = clock();
+//   
+//   subtraction(sum, carryPointer, *EK, ctarray1, ctarray2, *initialcarry);
+//   
+//   clock_t end = clock();
+//   double elapsed_secs = double(end-begin) / CLOCKS_PER_SEC;
+}
+
+//encrypts all plaintexts
+void encryptPlaintexts(LWE::CipherText** result[], int inputs[]){
+    for (int i=0; i<vectorlength; i++){
+        int thisint = inputs[i];
+        LWE::CipherText* encrypt[numBits];
+        encryptInt(encrypt, thisint);
+        result[i] = encrypt;
+    }
+}
+
+//given two array of encrypted plaintexts, calculate 1 norm
+int oneNorm(LWE::CipherText** input1[], LWE::CipherText** input2[]){
+
 }
 
 
@@ -318,8 +381,8 @@ int main(int argc, char *argv[]) {
   char *EKfilename = "ev.key";
   char *SKfilename = "sec.key";
   
-  int input1 = atoi(argv[1]);
-//   int input2 = atoi(argv[2]);
+  //int input1 = atoi(argv[1]);
+  // int input2 = atoi(argv[2]);
   
   FHEW::Setup();
 
@@ -357,16 +420,31 @@ int main(int argc, char *argv[]) {
   //initialize carry to 0 
   LWE::Encrypt(initialcarry, *SK, 0);
   
-  //
-  // test encryptint and decryptint
-       //integer
-  LWE::CipherText* encrypt[numBits];
-   encryptInt(encrypt, input1);
-  int decrypted = decryptInt(encrypt);
-  cout << "decrypted = " << decrypted << "\n";
-//
-  //
+//   //
+//   // test encryptint and decryptint
+//        //integer
+//   LWE::CipherText* encrypt[numBits];
+//    encryptInt(encrypt, input1);
+//   int decrypted = decryptInt(encrypt);
+//   cout << "decrypted = " << decrypted << "\n";
+// //
+//   //
   
+  
+  //
+  //test encryptPlaintexts
+  
+  
+  
+  
+  LWE::CipherText** encryptedvector[vectorlength];
+  clock_t begin = clock();
+  encryptPlaintexts(encryptedvector, fingerprintvector);
+  clock_t end = clock();
+  double elapsed_secs = double(end-begin) / CLOCKS_PER_SEC;
+  cout << "encryptPlaintexts elapsed sec = " << elapsed_secs << "\n";
+  //
+  //
   
   //
   //test addPlaintext
