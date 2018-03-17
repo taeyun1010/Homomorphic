@@ -1,3 +1,19 @@
 Times to add two homomorphically encrypted 32 bit integers:
 elapsed sec = 52.9544
 elapsed sec = 52.9751
+
+
+Times to add two homomorphically encrypted 8 bit integers:
+elapsed sec = 13.2169
+elapsed sec = 13.2347
+
+Times to add two homomorphically encrypted 15 bit integers:
+
+
+Times to add two homomorphically encrypted 10 bit integers:
+addition time = 16.423
+addition time = 16.5214
+
+Encrypting 640 fingerprint vector takes:
+encryptPlaintexts elapsed sec = 0.023993
+encryptPlaintexts elapsed sec = 0.023876
