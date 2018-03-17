@@ -10,13 +10,14 @@
 #include <ctime>
 #include <vector>
 #include <algorithm>
+#include <cmath>
 using namespace std;
 
 FHEW::EvalKey* EK;
 
 LWE::SecretKey* SK;
 
-int numBits =8;
+int numBits =10;
 
 void XorGate(LWE::CipherText* res, const FHEW::EvalKey& EK, const LWE::CipherText& ct1, const LWE::CipherText& ct2) {
     LWE::CipherText *orResult, *nandResult;
@@ -270,6 +271,8 @@ void encryptInt(LWE::CipherText* result[], int input){
     
     int j=0;
     for (vector<int>::const_iterator i = bits.begin(); i != bits.end(); ++i){
+//         if (j >= numBits)
+//             break;
         cout << *i << ' ';
         LWE::CipherText* ct = new LWE::CipherText;
         LWE::Encrypt(ct, *SK, *i);
@@ -279,9 +282,9 @@ void encryptInt(LWE::CipherText* result[], int input){
     
     
 }
-// 
-// void decryptInt(LWE::CipherText* result[], int input){
-//     
+
+int decryptInt(LWE::CipherText* encrypted[]){
+    int result = 0;
 //     int j=0;
 //     for (vector<int>::const_iterator i = bits.begin(); i != bits.end(); ++i){
 //         cout << *i << ' ';
@@ -291,8 +294,14 @@ void encryptInt(LWE::CipherText* result[], int input){
 //         j++;
 //     }
 //     
-//     
-// }
+    for (int i=0; i< numBits; i++){
+        LWE::CipherText* ct = encrypted[i];
+        int bit = LWE::Decrypt(*SK, *ct);
+        result = result + bit * pow(2,i);
+    }
+    return result;
+    
+}
 
 // TODO: encrypts two inputs, adds them, decrypts to see if addition works
 void addPlaintext(int input1, int input2){
@@ -310,7 +319,7 @@ int main(int argc, char *argv[]) {
   char *SKfilename = "sec.key";
   
   int input1 = atoi(argv[1]);
-  int input2 = atoi(argv[2]);
+//   int input2 = atoi(argv[2]);
   
   FHEW::Setup();
 
@@ -349,9 +358,20 @@ int main(int argc, char *argv[]) {
   LWE::Encrypt(initialcarry, *SK, 0);
   
   //
+  // test encryptint and decryptint
+       //integer
+  LWE::CipherText* encrypt[numBits];
+   encryptInt(encrypt, input1);
+  int decrypted = decryptInt(encrypt);
+  cout << "decrypted = " << decrypted << "\n";
+//
+  //
+  
+  
+  //
   //test addPlaintext
   //cout << "input1 = " << input1 << "\n";
-  addPlaintext(input1,input2);
+  //addPlaintext(input1,input2);
   //
   //
   
@@ -360,7 +380,7 @@ int main(int argc, char *argv[]) {
 //   int carryOutput = 0;
 //   int* carryPointer = &carryOutput;
 //   
-//   //4 byte integer
+// //   //4 byte integer
 //   LWE::CipherText* sum[numBits];
 //   LWE::CipherText* ctarray1[numBits];
 //   LWE::CipherText* ctarray2[numBits];
