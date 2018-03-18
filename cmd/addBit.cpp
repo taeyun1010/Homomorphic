@@ -17,7 +17,7 @@ FHEW::EvalKey* EK;
 
 LWE::SecretKey* SK;
 
-int numBits =8;
+int numBits =10;
 // 
 // int num_disk = 8;
 // int num_sectors = 80;
@@ -71,7 +71,7 @@ int fingerprintvector2[16] = {73,
 typedef struct { 
     
     // CAUTION!!!!!!!!!!! TODO,   numBits
-    LWE::CipherText* cts[8];
+    LWE::CipherText* cts[10];
 } Encryptedvalue;
 
 
@@ -696,10 +696,10 @@ int oneNorm(Encryptedvalue encryptedvector[], Encryptedvalue encryptedvector2[])
         result[i] = encryptedzero;
     }
     
-    //constant
-    LWE::CipherText* constant[numBits];
-    encryptInt(constant, 25);
-    
+//     //constant
+//     LWE::CipherText* constant[numBits];
+//     encryptInt(constant, 25);
+//     
     
     for(int i=0; i<vectorlength; i++){
         Encryptedvalue thisinput1 = encryptedvector[i];
@@ -729,13 +729,17 @@ int oneNorm(Encryptedvalue encryptedvector[], Encryptedvalue encryptedvector2[])
         //LWE::CipherText* ct1[]
         subtraction(subtracted, carryPointer, *EK, ct1, ct2, *initialcarry);
         
-        //if negative, add predetermined value
-        if (isNegative(subtracted)){
-            addition(result, carryPointer, *EK, constant, result , *initialcarry);
-        }
-        else{
-            addition(result, carryPointer, *EK, subtracted, result , *initialcarry);
-        }
+//         //if negative, add predetermined value
+//         if (isNegative(subtracted)){
+//             addition(result, carryPointer, *EK, constant, result , *initialcarry);
+//         }
+//         else{
+//             addition(result, carryPointer, *EK, subtracted, result , *initialcarry);
+//         }
+        
+        //add absolute value
+        absolute(*EK, subtracted);
+        addition(result, carryPointer, *EK, subtracted, result , *initialcarry);
         
     }
     
@@ -752,7 +756,7 @@ int main(int argc, char *argv[]) {
   char *EKfilename = "ev.key";
   char *SKfilename = "sec.key";
   
-  int input1 = atoi(argv[1]);
+  //int input1 = atoi(argv[1]);
   //int input2 = atoi(argv[2]);
   
   FHEW::Setup();
@@ -791,17 +795,17 @@ int main(int argc, char *argv[]) {
   //initialize carry to 0 
   LWE::Encrypt(initialcarry, *SK, 0);
   
-  //
-  // test encryptint and decryptint, absolute
-       //integer
-  LWE::CipherText* encrypt[numBits];
-  //LWE::CipherText* result[numBits];
-   encryptInt(encrypt, input1);
-   absolute(*EK, encrypt);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-  int decrypted = decryptInt(encrypt);
-  cout << "abs value = " << decrypted << "\n";
-//
-  //
+//   //
+//   // test encryptint and decryptint, absolute
+//        //integer
+//   LWE::CipherText* encrypt[numBits];
+//   //LWE::CipherText* result[numBits];
+//    encryptInt(encrypt, input1);
+//    absolute(*EK, encrypt);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+//   int decrypted = decryptInt(encrypt);
+//   cout << "abs value = " << decrypted << "\n";
+// //
+//   //
   
   
   
@@ -818,31 +822,31 @@ int main(int argc, char *argv[]) {
   
   
   
-//   //test oneNorm
-//   //LWE::CipherText** encryptedvector[vectorlength];
-//   
-//   Encryptedvalue encryptedvector[vectorlength];
-//   
-//   encryptPlaintexts(encryptedvector, fingerprintvector);
-//   
-//   //LWE::CipherText** encryptedvector2[vectorlength];
-//   
-//   Encryptedvalue encryptedvector2[vectorlength];
-//   
-//   encryptPlaintexts(encryptedvector2, fingerprintvector2);
-//   
-//   clock_t begin = clock();
-//   
-//   int distance = oneNorm(encryptedvector, encryptedvector2);
-//  
-//   clock_t end = clock();
-//   double elapsed_secs = double(end-begin) / CLOCKS_PER_SEC;
-//   cout << "elapsed sec = " << elapsed_secs << "\n";
-//   
-//   cout << "distance = " << distance <<"\n";
-//   //
-//   //
-//   
+  //test oneNorm
+  //LWE::CipherText** encryptedvector[vectorlength];
+  
+  Encryptedvalue encryptedvector[vectorlength];
+  
+  encryptPlaintexts(encryptedvector, fingerprintvector);
+  
+  //LWE::CipherText** encryptedvector2[vectorlength];
+  
+  Encryptedvalue encryptedvector2[vectorlength];
+  
+  encryptPlaintexts(encryptedvector2, fingerprintvector2);
+  
+  clock_t begin = clock();
+  
+  int distance = oneNorm(encryptedvector, encryptedvector2);
+ 
+  clock_t end = clock();
+  double elapsed_secs = double(end-begin) / CLOCKS_PER_SEC;
+  cout << "elapsed sec = " << elapsed_secs << "\n";
+  
+  cout << "distance = " << distance <<"\n";
+  //
+  //
+  
   
   
   
