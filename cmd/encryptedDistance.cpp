@@ -762,11 +762,17 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
      int *inputvector = (int*) mxGetPr(prhs[0]);
     int *inputvector2 = (int*) mxGetPr(prhs[1]);
     
+//     cout << "*inputvector = " << *inputvector << "\n";
+//     
     for (int i =0; i< vectorlength ; i++){
+//         cout << "*inputvector = " << *inputvector << "\n";
+       // cout << "inputvector[i] = " << inputvector[i] << "\n";
         fingerprintvector[i] = inputvector[i];
         
         fingerprintvector2[i] = inputvector2[i];
     }
+    
+    
   char *EKfilename = "ev.key";
   char *SKfilename = "sec.key";
   
@@ -808,7 +814,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
 //   
 //   //initialize carry to 0 
 //   LWE::Encrypt(initialcarry, *SK, 0);
-  
+//   
 //   //
 //   // test encryptint and decryptint, absolute
 //        //integer
@@ -834,14 +840,19 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
   //
   //test encryptPlaintexts
   
-  
+//   for (int i=0; i<vectorlength; i++){
+//   cout << "fingerprintvector[i] = "<<fingerprintvector[i] <<"\n";
+//             cout<<"fingerprintvector2[i] = " << fingerprintvector2[i] << "\n";
+//   }
   
   //test oneNorm
   //LWE::CipherText** encryptedvector[vectorlength];
   
   Encryptedvalue encryptedvector[vectorlength];
   
+ 
   encryptPlaintexts(encryptedvector, fingerprintvector);
+  
   
   //LWE::CipherText** encryptedvector2[vectorlength];
   
@@ -858,6 +869,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
   cout << "elapsed sec to calculate norm = " << elapsed_secs << "\n";
   
   cout << "1 norm distance = " << distance <<"\n";
+  
+  plhs[0] = mxCreateNumericMatrix(1, 1, mxINT32_CLASS, mxREAL);
+  int *answer = (int*) mxGetData(plhs[0]);
+    //int *a = (int*) mxGetPr(plhs[0]);
+  *answer = distance;
   //
   //
   
