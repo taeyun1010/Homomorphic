@@ -24,5 +24,149 @@ subtraction time = 16.6683
 
 store the result in one of input arrays, to save pointers and memory?
 
-caclualting oneNorm of vectors of length of one with least number takes:
+
+//These used 10 bit integers
+
+caclualting oneNorm of vectors of length of 1 with least number takes:
 elapsed sec = 33.1317
+
+caclualting oneNorm of vectors of length of 1 with greatest number (255 and 254) takes:
+elapsed sec = 33.5501
+
+caclualting oneNorm of vectors of length of 1 with greatest and least number (255 and 1) takes:
+elapsed sec = 32.9118
+
+caclualting oneNorm of vectors of length of 2 with least number (0 and 1) takes:
+elapsed sec = 65.8843
+
+caclualting oneNorm of vectors of length of 3 with random numbers takes:
+elapsed sec = 98.7985
+
+caclualting oneNorm of vectors of length of 10 with random numbers takes:
+elapsed sec = 335.068
+//
+
+//added fixed constant (25 for now) if difference resulted negative value
+
+//These used 5 bit integers
+caclualting oneNorm of vectors of length of 10 with low numbers (1,2,3,4,5) takes:
+elapsed sec = 167.527
+
+//vectors scaled
+in database		tobeverifeid		distance
+1			1			6.0267
+
+
+// calculating 1norm with 16 length vectors, rounded double to integer, but not scaled
+actual				homomorphic		time
+401.2999			326			534.492
+
+//calculating 1norm, with absolute working, using 8 bit intger, 16 length vectors
+actual				homomorphic		time
+401.2999			meaningless		578.79 s
+
+//same as previous, but using 10 bit integer
+actual				homomorphic(1norm)	time
+401.2999			401			714.532		
+401.2999			401			244.223
+193.9647			326			252.99
+193.9647			326			238.807
+?				353			229.487
+
+//make sure to change all TODOs when chaning number of bits or length of vector
+	
+
+//Encrypted fingerprint Auth n_arcs = 8
+in database		tobeverified		distance		
+1			1			353
+
+						elapsed sec to calculate norm = 229.487
+						1 norm distance = 353
+						BSKey Read. 
+						elapsed sec to calculate norm = 225.754
+						1 norm distance = 358
+						BSKey Read. 
+						elapsed sec to calculate norm = 245.693
+						1 norm distance = 451
+						BSKey Read. 
+						elapsed sec to calculate norm = 218.864
+						1 norm distance = 442
+						BSKey Read. 
+						elapsed sec to calculate norm = 215.77
+						1 norm distance = 395
+						BSKey Read. 
+						elapsed sec to calculate norm = 227.382
+						1 norm distance = 362
+						BSKey Read. 
+						elapsed sec to calculate norm = 210.883
+						1 norm distance = 401
+						BSKey Read. 
+						elapsed sec to calculate norm = 217.839
+						1 norm distance = 358
+
+// n_arcs = 1  n_bands = 8
+in database		tobeverified		distance
+2			2			214
+
+						elapsed sec to calculate norm = 209.038
+						1 norm distance = 214
+						BSKey Read. 
+						elapsed sec to calculate norm = 208.922
+						1 norm distance = 228
+
+//average 1 norm distance of fingerprints from same person, this+alpha will be used as a threshold 
+// for encrypted fingerprint authentication (used 2000 fingerprint pairs)
+145.0220
+
+//average 1 norm distance of fingerprints from different person (used 2000 fingerprint pairs)
+171.3872
+
+//must be less than or equal to threshold to be authenticated
+
+//setting threshold to 100 gives (1 norm encrypted, rounded to int)
+fn =
+
+        1621
+
+
+tp =
+
+   379
+
+
+fp =
+
+   134
+
+
+tn =
+
+        1865
+
+//average 2 norm distance of fingerprints from same person, this+alpha will be used as a threshold 
+// for encrypted fingerprint authentication (used 2000 fingerprint pairs)
+46.5342
+
+
+//average 2 norm distance of fingerprints from different person (used 2000 fingerprint pairs)
+54.3751
+
+//setting threshold to 32.14 give (2 norm , double)
+n =
+
+        1633
+
+
+tp =
+
+   367
+
+
+fp =
+
+   134
+
+
+tn =
+
+        1865
