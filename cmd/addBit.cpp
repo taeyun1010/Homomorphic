@@ -35,8 +35,8 @@ int vectorlength = 1;
 // double vectors[vectorlength]; 
 
 // CAUTION!!!!!!!!!!!! fixed constant  TODO
-int fingerprintvector[1] = {0};
-int fingerprintvector2[1] = {0};
+int fingerprintvector[1] = {3};
+int fingerprintvector2[1] = {1};
 
 typedef struct { 
     
@@ -603,54 +603,54 @@ int oneNorm(Encryptedvalue encryptedvector[], Encryptedvalue encryptedvector2[])
         result[i] = encryptedzero;
     }
     
-//     //constant
-//     LWE::CipherText* constant[numBits];
-//     encryptInt(constant, 1);
+    //constant
+    LWE::CipherText* constant[numBits];
+    encryptInt(constant, 1);
     
-//     
-//     for(int i=0; i<vectorlength; i++){
-//         Encryptedvalue thisinput1 = encryptedvector[i];
-//         Encryptedvalue thisinput2 = encryptedvector2[i];
-//         
-//         LWE::CipherText* initialcarry;
-//         
-//         initialcarry = new LWE::CipherText;
-//         
-//         int carryOutput = 0;
-//         int* carryPointer = &carryOutput;
-//         
-//         //initialize carry to 0
-//         LWE::Encrypt(initialcarry, *SK, 0);
-//         
-//         //4 byte integer
-//         LWE::CipherText* subtracted[numBits];
-//         
-//         LWE::CipherText* ct1[numBits];
-//         LWE::CipherText* ct2[numBits];
-//         
-//         for (int j=0; j< numBits; j++){
-//             ct1[j] = thisinput1.cts[j];
-//             ct2[j] = thisinput2.cts[j];
-//         }
-//         
-//         //LWE::CipherText* ct1[]
-//         subtraction(subtracted, carryPointer, *EK, ct1, ct2, *initialcarry);
-//         
-//         //if negative, add predetermined value
-//         if (isNegative(subtracted)){
-//             addition(result, carryPointer, *EK, constant, result , *initialcarry);
-//         }
-//         else{
-//             addition(result, carryPointer, *EK, subtracted, result , *initialcarry);
-//         }
-//         
-//     }
-//     
-//     int distance = decryptInt(result);
-//     
-//     return distance;
     
-    return 1;
+    for(int i=0; i<vectorlength; i++){
+        Encryptedvalue thisinput1 = encryptedvector[i];
+        Encryptedvalue thisinput2 = encryptedvector2[i];
+        
+        LWE::CipherText* initialcarry;
+        
+        initialcarry = new LWE::CipherText;
+        
+        int carryOutput = 0;
+        int* carryPointer = &carryOutput;
+        
+        //initialize carry to 0
+        LWE::Encrypt(initialcarry, *SK, 0);
+        
+        //4 byte integer
+        LWE::CipherText* subtracted[numBits];
+        
+        LWE::CipherText* ct1[numBits];
+        LWE::CipherText* ct2[numBits];
+        
+        for (int j=0; j< numBits; j++){
+            ct1[j] = thisinput1.cts[j];
+            ct2[j] = thisinput2.cts[j];
+        }
+        
+        //LWE::CipherText* ct1[]
+        subtraction(subtracted, carryPointer, *EK, ct1, ct2, *initialcarry);
+        
+        //if negative, add predetermined value
+        if (isNegative(subtracted)){
+            addition(result, carryPointer, *EK, constant, result , *initialcarry);
+        }
+        else{
+            addition(result, carryPointer, *EK, subtracted, result , *initialcarry);
+        }
+        
+    }
+    
+    int distance = decryptInt(result);
+    
+    return distance;
+    
+    //return 1;
 }
 
 
@@ -738,8 +738,9 @@ int main(int argc, char *argv[]) {
   
   encryptPlaintexts(encryptedvector2, fingerprintvector2);
   
-  oneNorm(encryptedvector, encryptedvector2);
+  int distance = oneNorm(encryptedvector, encryptedvector2);
  
+  cout << "distance = " << distance <<"\n";
   //
   //
   
