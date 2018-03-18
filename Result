@@ -17,3 +17,12 @@ addition time = 16.5214
 Encrypting 640 fingerprint vector takes:
 encryptPlaintexts elapsed sec = 0.023993
 encryptPlaintexts elapsed sec = 0.023876
+
+Times to subtract two homomorphically encrypted 10 bit integers:
+subtraction time = 16.562
+subtraction time = 16.6683
+
+store the result in one of input arrays, to save pointers and memory?
+
+caclualting oneNorm of vectors of length of one with least number takes:
+elapsed sec = 33.1317
